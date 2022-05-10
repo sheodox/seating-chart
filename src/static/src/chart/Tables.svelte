@@ -27,6 +27,7 @@
 	}
 	.table {
 		background: var(--shdx-gray-50);
+		outline: 4px solid transparent;
 		width: 10%;
 		aspect-ratio: 1;
 		position: absolute;
@@ -64,13 +65,13 @@
 			}
 		}
 	}
+	.table.highlight-table {
+		outline-offset: 4px;
+		outline-color: var(--shdx-blue-500);
+	}
+
 	.dragging-guest {
 		outline-offset: 0px;
-		outline: 4px solid transparent;
-
-		&.over-this-table {
-			outline-offset: 4px;
-		}
 
 		&.can-hold {
 			outline-color: var(--shdx-blue-500);
@@ -100,7 +101,7 @@
 			style="top: {table.posY * 100}%; left: {table.posX * 100}%;"
 			class:moving={movingTable !== null}
 			class:dragging-guest={!!$draggingGuest}
-			class:over-this-table={$draggingOverTable === table.id}
+			class:highlight-table={$highlightTable === table.id}
 			class:can-hold={$draggingGuest && canHoldGuest(table, $guests)}
 			class:over-capacity={peopleAtTable(table, $guests) > table.capacity}
 			draggable={$editorMode === 'tables'}
@@ -109,7 +110,7 @@
 			on:contextmenu|preventDefault={() => deleteTable(index)}
 			on:click|stopPropagation
 			on:dragover|preventDefault={() => dragOver(table)}
-			on:dragleave={() => ($draggingOverTable = '')}
+			on:dragleave={() => ($highlightTable = '')}
 		>
 			<button
 				class="table-name"
@@ -140,7 +141,7 @@
 	import { Icon } from 'sheodox-ui';
 	import { editorMode } from '../stores/editor';
 	import { guestOps, guests, Guest, draggingGuest } from '../stores/guests';
-	import { tableOps, tables, draggingOverTable, Table } from '../stores/tables';
+	import { tableOps, tables, highlightTable, Table } from '../stores/tables';
 
 	$: editable = ['tables', 'assignments'].includes($editorMode);
 
@@ -184,7 +185,7 @@
 	}
 
 	function dragOver(table: Table) {
-		$draggingOverTable = table.id;
+		$highlightTable = table.id;
 	}
 
 	$: $editorMode && updateCanvasDimensions();
@@ -207,7 +208,7 @@
 
 	function assignmentDrop(e: DragEvent, table: Table) {
 		guestOps.assign(e.dataTransfer.getData('guestId'), table.id);
-		$draggingOverTable = '';
+		$highlightTable = '';
 	}
 
 	function deleteTable(index: number) {

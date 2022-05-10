@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			{#each guests as guest}
-				<tr>
+				<tr on:mouseenter={() => ($highlightTable = guest.tableId)} on:mouseleave={() => ($highlightTable = '')}>
 					<td>
 						<button draggable="true" on:dragstart={(e) => dragStart(e, guest)}>
 							{guest.firstName}
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 	import { Icon } from 'sheodox-ui';
-	import { tables } from '../stores/tables';
+	import { highlightTable, tables } from '../stores/tables';
 	import { draggingGuest, Guest, guestOps } from '../stores/guests';
 
 	export let guests: Guest[];

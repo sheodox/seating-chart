@@ -10,7 +10,7 @@ export interface Table {
 }
 
 export const tables = writable<Table[]>([]);
-export const draggingOverTable = writable('');
+export const highlightTable = writable('');
 
 interface TableAdd {
 	name: string;

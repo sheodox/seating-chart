@@ -49,7 +49,6 @@
 		window.addEventListener(
 			'dragend',
 			() => {
-				console.log('!');
 				$draggingGuest = null;
 			},
 			{ once: true }

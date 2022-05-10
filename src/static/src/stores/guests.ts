@@ -27,7 +27,7 @@ on('guests/add', (g: Guest) => {
 	});
 });
 
-function sortGuests(guests: Guest[]) {
+export function sortGuests(guests: Guest[]) {
 	guests.sort((aGuest, bGuest) => {
 		const a = aGuest.lastName.toLowerCase(),
 			b = bGuest.lastName.toLowerCase();

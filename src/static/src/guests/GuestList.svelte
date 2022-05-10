@@ -3,7 +3,7 @@
 		width: 10rem;
 	}
 	th.people {
-		width: 5rem;
+		width: 10rem;
 	}
 	th.actions {
 		width: 15rem;
@@ -13,6 +13,7 @@
 	}
 	th {
 		padding: var(--shdx-spacing-3);
+		text-align: left;
 	}
 </style>
 
@@ -20,10 +21,11 @@
 	<NewGuest />
 
 	<table>
+		<caption>Total {$guests.length} guests with {totalPeople} people.</caption>
 		<thead>
 			<tr>
-				<th class="first-name">First Name</th>
 				<th class="last-name">Last Name</th>
+				<th class="first-name">First Name</th>
 				<th class="people">People</th>
 				<th class="actions">Actions</th>
 			</tr>
@@ -40,4 +42,6 @@
 	import { guests } from '../stores/guests';
 	import NewGuest from './NewGuest.svelte';
 	import Guest from './Guest.svelte';
+
+	$: totalPeople = $guests.reduce((people, guest) => people + guest.people, 0);
 </script>

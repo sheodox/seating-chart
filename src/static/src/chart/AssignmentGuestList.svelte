@@ -36,11 +36,17 @@
 <script lang="ts">
 	import { Icon } from 'sheodox-ui';
 	import { highlightTable, tables } from '../stores/tables';
-	import { draggingGuest, Guest, guestOps } from '../stores/guests';
+	import { draggingGuest, Guest, guestOps, sortGuests } from '../stores/guests';
 
 	export let guests: Guest[];
 	export let listTitle: string;
 	export let showTable: boolean;
+
+	let sortedGuests = [];
+	$: {
+		sortedGuests = [...guests];
+		sortGuests(sortedGuests);
+	}
 
 	function dragStart(e: DragEvent, guest: Guest) {
 		e.dataTransfer.setData('guestId', guest.id);

@@ -10,10 +10,10 @@
 <tr>
 	{#if editMode}
 		<td>
-			<input aria-label="first name" bind:value={firstName} />
+			<input aria-label="last name" bind:value={lastName} />
 		</td>
 		<td>
-			<input aria-label="last name" bind:value={lastName} />
+			<input aria-label="first name" bind:value={firstName} />
 		</td>
 		<td>
 			<input aria-label="people" bind:value={people} type="number" class="people" />
@@ -24,8 +24,8 @@
 			<button on:click={del} class="danger">Delete</button>
 		</td>
 	{:else}
-		<td>{guest.firstName}</td>
 		<td>{guest.lastName}</td>
+		<td>{guest.firstName}</td>
 		<td>{guest.people}</td>
 		<td>
 			<button on:click={toggleMode}>Edit</button>

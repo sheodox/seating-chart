@@ -100,7 +100,7 @@ func (g GuestController) Assign(data map[string]any) (GuestDTO, error) {
 	tableId, hasValidTableId := data["tableId"].(string)
 	guestDto := GuestDTO{}
 
-	guestEntity, err := g.Interactor.Assign(guestId, sql.NullString{tableId, hasValidTableId})
+	guestEntity, err := g.Interactor.Assign(guestId, sql.NullString{String: tableId, Valid: hasValidTableId})
 
 	if err != nil {
 		return guestDto, err

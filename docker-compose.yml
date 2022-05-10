@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - 5007:5007
+    depends_on:
+      - postgres
+    volumes:
+      - .env:/go/src/app/.env
+    restart: unless-stopped
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: $PGUSER
+      POSTGRES_PASSWORD: $PGPASSWORD
+      POSTGRES_DB: $PGDATABASE
+    volumes:
+      - type: volume
+        source: postgres
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+    restart: unless-stopped
+volumes:
+  postgres:

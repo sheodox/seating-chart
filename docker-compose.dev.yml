@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  api:
+    build:
+      target: dev
+    volumes:
+      - ./src/server/:/go/src/app/
+    restart: unless-stopped

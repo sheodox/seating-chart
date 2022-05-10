@@ -1,0 +1,13 @@
+{
+	"commands": [
+		{
+			"cmd": "./run.sh dev",
+			"groups": ["dev"]
+		},
+		{
+			"cmd": "npm run dev",
+			"cwd": "./src/static",
+			"groups": ["dev"]
+		}
+	]
+}

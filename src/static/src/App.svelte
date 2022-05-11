@@ -13,12 +13,14 @@
 	</nav>
 </Header>
 
+<Toasts />
+
 <main class="f-column f-1">
 	<Routing />
 </main>
 
 <script lang="ts">
-	import { Header, Icon } from 'sheodox-ui';
+	import { Header, Icon, Toasts } from 'sheodox-ui';
 	import Routing from './Routing.svelte';
 	import Link from './lib/Link.svelte';
 	import { activeRoute } from './stores/routing';

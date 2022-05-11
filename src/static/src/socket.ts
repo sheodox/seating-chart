@@ -1,3 +1,5 @@
+import { createAutoExpireToast } from 'sheodox-ui';
+
 const RECONNECT_DELAY_MS = 1000;
 
 let socket: WebSocket | null = null;
@@ -78,4 +80,10 @@ setupSocket();
 
 on('error', (msg) => {
 	console.error(`SocketErr: ${msg}`);
+
+	createAutoExpireToast({
+		variant: 'error',
+		title: 'Error',
+		message: msg,
+	});
 });

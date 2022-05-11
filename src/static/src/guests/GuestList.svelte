@@ -18,6 +18,8 @@
 </style>
 
 <section class="f-column align-items-center gap-5 my-5">
+	<GuestToolbar />
+
 	<NewGuest />
 
 	<table>
@@ -42,6 +44,7 @@
 	import { guests } from '../stores/guests';
 	import NewGuest from './NewGuest.svelte';
 	import Guest from './Guest.svelte';
+	import GuestToolbar from './GuestToolbar.svelte';
 
 	$: totalPeople = $guests.reduce((people, guest) => people + guest.people, 0);
 </script>

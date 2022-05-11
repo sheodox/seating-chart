@@ -59,4 +59,7 @@ export const guestOps = {
 	assign(guestId: string, tableId: string) {
 		send('guests/assign', { tableId, guestId });
 	},
+	add(args: { firstName: string; lastName: string; people: number }) {
+		send('guests/add', args);
+	},
 };

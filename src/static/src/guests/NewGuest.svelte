@@ -16,18 +16,14 @@
 
 <script lang="ts">
 	import { TextInput } from 'sheodox-ui';
-	import { send } from '../socket';
+	import { guestOps } from '../stores/guests';
 
 	let people = 1,
 		firstName = '',
 		lastName = '';
 
 	function add() {
-		send('guests/add', {
-			firstName,
-			lastName,
-			people,
-		});
+		guestOps.add({ firstName, lastName, people });
 
 		people = 1;
 		lastName = '';

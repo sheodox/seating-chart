@@ -9,4 +9,5 @@ var (
 	ErrInvalidName      = errors.New("a first and last name must be specified")
 	ErrInvalidTableName = errors.New("a name must be specified")
 	ErrInvalidId        = errors.New("must include a valid guest ID")
+	ErrInvalidCapacity  = errors.New("table capacity must be at least 1")
 )

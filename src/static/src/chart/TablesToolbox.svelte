@@ -9,12 +9,27 @@
 		{#each $tables as table}
 			<tr>
 				<td>{table.name}</td>
-				<td>{table.capacity}</td>
+				<td>
+					<button on:click={() => promptCapacity(table)}>
+						{table.capacity}
+					</button>
+				</td>
 			</tr>
 		{/each}
 	</tbody>
 </table>
 
 <script lang="ts">
-	import { tables } from '../stores/tables';
+	import { Table, tableOps, tables } from '../stores/tables';
+
+	function promptCapacity(table: Table) {
+		const capacity = parseInt(prompt('Enter a new capacity', '' + table.capacity), 10);
+
+		if (capacity && capacity > 0) {
+			tableOps.edit({
+				...table,
+				capacity,
+			});
+		}
+	}
 </script>

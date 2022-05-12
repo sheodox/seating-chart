@@ -9,10 +9,19 @@
 		cursor: crosshair;
 	}
 	svg {
+		position: absolute;
+		top: 0;
 		pointer-events: none;
 		stroke-width: 2px;
 		stroke: white;
 		fill: none;
+	}
+	svg.inactive {
+		opacity: 0.3;
+	}
+	svg.highlighted {
+		stroke: var(--shdx-blue-500);
+		opacity: 1;
 	}
 	.point-button {
 		margin: 0;
@@ -30,10 +39,9 @@
 	}
 </style>
 
-<svelte:window on:resize={updateCanvasDimensions} />
 <div
 	class="chart"
-	class:editable
+	class:editable={editable && editingLine}
 	on:click={addPoint}
 	bind:this={canvas}
 	on:drop={finishMovingPoint}
@@ -41,12 +49,19 @@
 	on:mousemove={movePoint}
 	on:dragover|preventDefault
 >
-	<svg viewBox="0 0 {canvasRes} {canvasRes}" xmlns="http://www.w3.org/2000/svg">
-		<path d={path} />
-	</svg>
+	{#each $lines as line, lineIndex}
+		<svg
+			viewBox="0 0 {canvasRes} {canvasRes}"
+			xmlns="http://www.w3.org/2000/svg"
+			class:highlighted={$highlightingLineIndex === lineIndex}
+			class:inactive={editable && $editingLineIndex !== lineIndex}
+		>
+			<path d={genPath(line)} />
+		</svg>
+	{/each}
 
-	{#if editable}
-		{#each coordinates as coord, index}
+	{#if editable && editingLine}
+		{#each editingLine.coords as coord, index}
 			{#if index !== movingPoint}
 				<button
 					class:moving={movingPoint !== null}
@@ -64,71 +79,60 @@
 </div>
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { editingLineIndex, lines, lineOps, Line, LineCoordinate, highlightingLineIndex } from '../stores/lines';
 	import { editorMode } from '../stores/editor';
 
 	$: editable = $editorMode === 'lines';
-	type Coordinate = { x: number; y: number };
 
 	const canvasRes = 1000;
 
 	let canvas: HTMLElement,
-		canvasDimensions = { height: 0, width: 0, top: 0 },
-		coordinates: Coordinate[] = [],
 		movingPoint: number = null;
 
-	$: $editorMode && updateCanvasDimensions();
-	$: canvas && updateCanvasDimensions();
-
-	async function updateCanvasDimensions() {
-		await tick();
-		if (canvas) {
-			canvasDimensions = {
-				height: canvas.offsetHeight,
-				width: canvas.offsetWidth,
-				top: canvas.offsetTop,
-			};
-		}
-	}
-
-	onMount(() => {
-		updateCanvasDimensions();
-	});
+	$: editingLine = $lines[$editingLineIndex];
 
 	function addPoint(e: MouseEvent) {
-		if (editable) {
-			coordinates = [...coordinates, genCoordinatesFromEvent(e.offsetX, e.offsetY)];
+		if (editable && editingLine) {
+			const updatedLine = cloneLine(editingLine);
+			updatedLine.coords.push(genCoordinatesFromEvent(e.offsetX, e.offsetY));
+			lineOps.edit(updatedLine);
 		}
 	}
 
 	function genCoordinatesFromEvent(x: number, y: number) {
 		return {
-			x: x / canvasDimensions.width,
-			y: y / canvasDimensions.height,
+			x: x / canvas.offsetWidth,
+			y: y / canvas.offsetHeight,
 		};
 	}
 
-	$: path = genPath(coordinates);
+	function cloneLine(line: Line): Line {
+		return {
+			...line,
+			coords: line.coords.map((coord) => ({ ...coord })),
+		};
+	}
 
-	function genPath(coordinates: Coordinate[]) {
-		if (coordinates.length === 0) {
+	function genPath(line: Line) {
+		if (line.coords.length === 0) {
 			return '';
 		}
-		const start = coordinates[0],
-			points = coordinates
+		const start = line.coords[0],
+			points = line.coords
 				.slice(1)
 				.map((coord) => {
 					return `L${coord.x * canvasRes},${coord.y * canvasRes}`;
 				})
 				.join(' ');
 
-		return `M${start.x * canvasRes},${start.y * canvasRes} ${points} z`;
+		return `M${start.x * canvasRes},${start.y * canvasRes} ${points} ${line.closed ? 'z' : ''}`;
 	}
 
 	function deletePoint(index: number) {
 		if (editable) {
-			coordinates.splice(index, 1);
-			coordinates = coordinates;
+			const updatedLine = cloneLine(editingLine);
+			updatedLine.coords.splice(index, 1);
+			lineOps.edit(updatedLine);
 		}
 	}
 
@@ -143,6 +147,7 @@
 		}
 
 		movePoint(e);
+		lineOps.edit(editingLine);
 		movingPoint = null;
 	}
 
@@ -151,15 +156,18 @@
 			return;
 		}
 
-		coordinates[movingPoint] = genCoordinatesFromEvent(e.offsetX, e.offsetY);
-		coordinates = coordinates;
+		editingLine.coords[movingPoint] = genCoordinatesFromEvent(e.offsetX, e.offsetY);
+		editingLine = editingLine;
 	}
 
 	function duplicatePoint(index: number) {
+		const updatedLine = cloneLine(editingLine);
+
 		const newPoint = {
-			x: coordinates[index].x + 10,
-			y: coordinates[index].y + 10,
+			x: updatedLine.coords[index].x + 0.02,
+			y: updatedLine.coords[index].y + 0.02,
 		};
-		coordinates = [...coordinates.slice(0, index), newPoint, ...coordinates.slice(index)];
+		editingLine.coords = [...updatedLine.coords.slice(0, index), newPoint, ...updatedLine.coords.slice(index)];
+		editingLine = editingLine;
 	}
 </script>

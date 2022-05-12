@@ -9,7 +9,8 @@ create table tables (
 
 create table lines (
 	id varchar(100) primary key,
-	coords jsonb
+	closed boolean default true,
+	coords jsonb not null default '{}'::json
 );
 
 create table guests (
@@ -23,5 +24,5 @@ create table guests (
 
 create table settings (
 	id text primary key,
-	value jsonb not null
+	value jsonb not null default '{}'::json
 );

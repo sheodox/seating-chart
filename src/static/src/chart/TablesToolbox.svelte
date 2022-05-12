@@ -1,3 +1,4 @@
+<h1 class="my-0">Tables</h1>
 <table>
 	<thead>
 		<tr>

@@ -1,10 +1,15 @@
 <style>
 	aside {
 		background-color: var(--shdx-gray-400);
+		width: 25rem;
+		border-radius: 10px 0 0 10px;
+	}
+	aside :global(th) {
+		text-align: left;
 	}
 </style>
 
-<aside class="p-2">
+<aside class="p-2 f-column">
 	{#if $editorMode === 'lines'}
 		<LinesToolbox />
 	{:else if $editorMode === 'tables'}

@@ -64,15 +64,3 @@ func (g *Guest) Delete(id string) error {
 
 	return err
 }
-
-//-- name: GetGuests :many
-//select * from guests
-
-//-- name: CreateGuest :one
-//insert into guests (
-//id, first_name, last_name, people
-//) values ($1, $2, $3, $4)
-
-//-- name: DeleteGuest :exec
-//delete from guests
-//where id=$1

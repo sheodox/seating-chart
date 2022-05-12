@@ -67,6 +67,7 @@ function setupSocket() {
 		for (const msg of queued) {
 			sendMsg(msg);
 		}
+		queued = [];
 	});
 
 	//if the connection is closed we should try to reconnect it

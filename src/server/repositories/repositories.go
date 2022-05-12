@@ -8,12 +8,14 @@ import (
 type Repositories struct {
 	Guest Guest
 	Table Table
+	Line  Line
 }
 
 func NewRepositories() *Repositories {
 	return &Repositories{
 		Guest: Guest{db.Connection},
 		Table: Table{db.Connection},
+		Line:  Line{db.Connection},
 	}
 }
 

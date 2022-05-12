@@ -22,8 +22,6 @@ var (
 )
 
 func getUpgrader() websocket.Upgrader {
-	fmt.Printf("env %q\n", os.Getenv("APP_ENV"))
-
 	if isDev {
 		return websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
 			return true
@@ -49,6 +47,7 @@ type WSMessageRes struct {
 type Server struct {
 	Guests  controllers.GuestController
 	Tables  controllers.TableController
+	Lines   controllers.LineController
 	clients []*websocket.Conn
 }
 
@@ -64,6 +63,11 @@ func NewServer() *Server {
 		Tables: controllers.TableController{
 			Interactor: interactors.TableInteractor{
 				Repo: reps.Table,
+			},
+		},
+		Lines: controllers.LineController{
+			Interactor: interactors.LineInteractor{
+				Repo: reps.Line,
 			},
 		},
 		clients: make([]*websocket.Conn, 0),
@@ -84,6 +88,11 @@ func (s *Server) Start() {
 			AllowOrigins:     []string{"http://localhost:3000"},
 			AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 			AllowCredentials: true,
+		}))
+	} else {
+		e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+			Root:  "/usr/src/frontend",
+			HTML5: true,
 		}))
 	}
 
@@ -216,6 +225,39 @@ func (s *Server) handleWSMessage(client *websocket.Conn, msg []byte) error {
 		}
 
 		s.broadcast("guests/list", guests)
+	case "lines/add":
+		lines, err := s.Lines.Add(m.Data)
+		if err != nil {
+			s.sendError(client, err)
+			return nil
+		}
+		s.broadcast("lines/add", lines)
+	case "lines/edit":
+		lines, err := s.Lines.Edit(m.Data)
+		if err != nil {
+			s.sendError(client, err)
+			return nil
+		}
+		s.broadcast("lines/edit", lines)
+	case "lines/delete":
+		id, err := s.Lines.Delete(m.Data)
+		if err != nil {
+			s.sendError(client, err)
+			return nil
+		}
+		s.broadcast("lines/delete", id)
+	case "lines/list":
+		lines, err := s.Lines.List()
+
+		if err != nil {
+			s.sendError(client, err)
+			return nil
+		}
+
+		client.WriteJSON(WSMessageRes{
+			Route: "lines/list",
+			Data:  lines,
+		})
 	default:
 		log.Printf("Missing socket handler for %q\n", m.Route)
 		s.sendError(client, errors.New(fmt.Sprintf("missing handler for route %q", m.Route)))

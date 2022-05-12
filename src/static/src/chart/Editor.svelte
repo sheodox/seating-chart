@@ -13,12 +13,13 @@
 	#editors {
 		flex: 1;
 		position: relative;
+		aspect-ratio: 1;
 	}
 </style>
 
 <div class="toolbar f-row gap-1 p-1">
 	{#each modes as m}
-		<button aria-pressed={$editorMode === m.id} on:click={() => ($editorMode = m.id)}>{m.name}</button>
+		<button aria-pressed={$editorMode === m.id} on:click={() => ($editorMode = m.id)}><span>{m.name}</span></button>
 	{/each}
 </div>
 

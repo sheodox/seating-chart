@@ -1,6 +1,6 @@
 {#if guests.length}
-	<h2>{listTitle}</h2>
 	<table>
+		<caption class="shdx-font-size-5 fw-bold">{listTitle}</caption>
 		<thead>
 			<tr>
 				<th>Guest</th>
@@ -22,7 +22,7 @@
 					{#if showTable}
 						<td>
 							{tableName(guest.tableId)}
-							<button on:click={() => clearAssignment(guest)} title="Unassign from table">
+							<button on:click={() => clearAssignment(guest)} title="Unassign from {tableName(guest.tableId)}">
 								<Icon icon="unlink" variant="icon-only" />
 							</button>
 						</td>

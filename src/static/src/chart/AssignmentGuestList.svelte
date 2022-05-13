@@ -21,8 +21,8 @@
 					</td>
 					{#if showTable}
 						<td>
-							{tableName(guest.tableId)}
-							<button on:click={() => clearAssignment(guest)} title="Unassign from {tableName(guest.tableId)}">
+							{tableName(guest.tableId, $tables)}
+							<button on:click={() => clearAssignment(guest)} title="Unassign from {tableName(guest.tableId, $tables)}">
 								<Icon icon="unlink" variant="icon-only" />
 							</button>
 						</td>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 	import { Icon } from 'sheodox-ui';
-	import { highlightTable, tables } from '../stores/tables';
+	import { highlightTable, Table, tables } from '../stores/tables';
 	import { draggingGuest, Guest, guestOps, sortGuests } from '../stores/guests';
 
 	export let guests: Guest[];
@@ -61,8 +61,8 @@
 		);
 	}
 
-	function tableName(tableId: string) {
-		return $tables.find((table) => table.id === tableId)?.name;
+	function tableName(tableId: string, tables: Table[]) {
+		return tables.find((table) => table.id === tableId)?.name || '';
 	}
 
 	function clearAssignment(guest: Guest) {

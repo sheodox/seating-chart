@@ -14,6 +14,10 @@ func (l *LineInteractor) Add() (entities.Line, error) {
 }
 
 func (l *LineInteractor) Edit(ent entities.Line) (entities.Line, error) {
+	for i, coord := range ent.Coords {
+		ent.Coords[i].X = clampPos(coord.X, 0.02)
+		ent.Coords[i].Y = clampPos(coord.Y, 0.02)
+	}
 	return l.Repo.Edit(ent)
 }
 

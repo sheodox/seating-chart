@@ -19,7 +19,8 @@ create table guests (
 	first_name text not null,
 	last_name text not null,
 	people int not null,
-	notes text default ''
+	notes text default '',
+	going boolean default true
 );
 
 create table settings (

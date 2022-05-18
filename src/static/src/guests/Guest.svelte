@@ -1,9 +1,9 @@
 <style>
-	input {
-		width: 100%;
-	}
 	tr {
 		border-bottom: 1px solid var(--shdx-gray-300);
+	}
+	.readonly-going {
+		cursor: not-allowed;
 	}
 </style>
 
@@ -19,6 +19,9 @@
 			<input aria-label="people" bind:value={people} type="number" class="people" />
 		</td>
 		<td>
+			<input aria-label="going" bind:checked={going} type="checkbox" />
+		</td>
+		<td>
 			<button on:click={save} disabled={!dirty} class="primary">Save</button>
 			<button on:click={toggleMode}>Cancel</button>
 			<button on:click={del} class="danger">Delete</button>
@@ -27,6 +30,16 @@
 		<td>{guest.lastName}</td>
 		<td>{guest.firstName}</td>
 		<td>{guest.people}</td>
+		<td
+			><input
+				aria-label="going"
+				checked={guest.going}
+				type="checkbox"
+				readOnly
+				on:click|preventDefault
+				class="readonly-going"
+			/></td
+		>
 		<td>
 			<button on:click={toggleMode}>Edit</button>
 		</td>
@@ -40,9 +53,14 @@
 
 	let editMode = false;
 
-	$: dirty = editMode && (firstName !== guest.firstName || lastName !== guest.lastName || people !== guest.people);
+	$: dirty =
+		editMode &&
+		(firstName !== guest.firstName || lastName !== guest.lastName || people !== guest.people || going !== guest.going);
 
-	let firstName: string, lastName: string, people: number;
+	let firstName: string,
+		lastName: string,
+		people: number,
+		going = true;
 
 	function toggleMode() {
 		editMode = !editMode;
@@ -50,6 +68,7 @@
 			firstName = guest.firstName;
 			lastName = guest.lastName;
 			people = guest.people;
+			going = guest.going;
 		}
 	}
 
@@ -59,6 +78,7 @@
 			firstName,
 			lastName,
 			people,
+			going,
 		});
 		toggleMode();
 	}

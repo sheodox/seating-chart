@@ -23,12 +23,13 @@
 	<NewGuest />
 
 	<table>
-		<caption>Total {$guests.length} guests with {totalPeople} people.</caption>
+		<caption>Total {$guests.length} guests with {totalPeople} people, of which {going} are going.</caption>
 		<thead>
 			<tr>
 				<th class="last-name">Last Name</th>
 				<th class="first-name">First Name</th>
 				<th class="people">People</th>
+				<th class="people">Going</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -47,4 +48,5 @@
 	import GuestToolbar from './GuestToolbar.svelte';
 
 	$: totalPeople = $guests.reduce((people, guest) => people + guest.people, 0);
+	$: going = $guests.reduce((people, guest) => (guest.going ? people + guest.people : people), 0);
 </script>

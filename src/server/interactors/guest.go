@@ -23,24 +23,24 @@ func (g *GuestInteractor) validateGuest(firstName, lastName string, people int) 
 	return nil
 }
 
-func (g *GuestInteractor) Add(firstName, lastName string, people int) (entities.Guest, error) {
+func (g *GuestInteractor) Add(firstName, lastName string, people int, going bool) (entities.Guest, error) {
 	err := g.validateGuest(firstName, lastName, people)
 
 	if err != nil {
 		return entities.Guest{}, err
 	}
 
-	return g.Repo.Add(firstName, lastName, people)
+	return g.Repo.Add(firstName, lastName, people, going)
 }
 
-func (g *GuestInteractor) Edit(id, firstName, lastName string, people int) (entities.Guest, error) {
+func (g *GuestInteractor) Edit(id, firstName, lastName string, people int, going bool) (entities.Guest, error) {
 	err := g.validateGuest(firstName, lastName, people)
 
 	if err != nil {
 		return entities.Guest{}, err
 	}
 
-	return g.Repo.Edit(id, firstName, lastName, people)
+	return g.Repo.Edit(id, firstName, lastName, people, going)
 }
 
 func (g *GuestInteractor) Assign(guestId string, tableId sql.NullString) (entities.Guest, error) {

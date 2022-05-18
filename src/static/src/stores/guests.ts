@@ -7,6 +7,7 @@ export interface Guest {
 	firstName: string;
 	lastName: string;
 	people: number;
+	going: boolean;
 	//notes: string;
 }
 
@@ -59,7 +60,7 @@ export const guestOps = {
 	assign(guestId: string, tableId: string) {
 		send('guests/assign', { tableId, guestId });
 	},
-	add(args: { firstName: string; lastName: string; people: number }) {
+	add(args: { firstName: string; lastName: string; people: number; going: boolean }) {
 		send('guests/add', args);
 	},
 };

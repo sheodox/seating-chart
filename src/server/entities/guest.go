@@ -9,4 +9,5 @@ type Guest struct {
 	LastName  string         `db:"last_name"`
 	People    int            `db:"people"`
 	Notes     string         `db:"notes"`
+	Going     bool           `db:"going"`
 }

@@ -8,6 +8,6 @@
 	import AssignmentGuestList from './AssignmentGuestList.svelte';
 	import { guests } from '../stores/guests';
 
-	$: unassigned = $guests.filter((g) => !g.tableId);
-	$: assigned = $guests.filter((g) => !!g.tableId);
+	$: unassigned = $guests.filter((g) => g.going && !g.tableId);
+	$: assigned = $guests.filter((g) => g.going && !!g.tableId);
 </script>

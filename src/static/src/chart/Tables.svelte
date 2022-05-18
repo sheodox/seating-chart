@@ -155,7 +155,7 @@
 
 	function peopleAtTable(table: Table, guests: Guest[], notIncluding?: Guest) {
 		return guests.reduce((people, guest) => {
-			if (notIncluding === guest) {
+			if (!guest.going || notIncluding === guest) {
 				return people;
 			}
 			return people + (guest.tableId === table.id ? guest.people : 0);
@@ -167,7 +167,7 @@
 	}
 
 	function assignedGuests(table: Table, guests: Guest[]) {
-		return guests.filter((g) => g.tableId === table.id);
+		return guests.filter((g) => g.going && g.tableId === table.id);
 	}
 
 	function canvasClick(e: MouseEvent) {

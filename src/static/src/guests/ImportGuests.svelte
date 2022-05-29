@@ -49,7 +49,7 @@
 
 	const dispatch = createEventDispatcher<{ imported: void }>();
 
-	let newGuests: { firstName: string; lastName: string; people: number }[] = [],
+	let newGuests: { firstName: string; lastName: string; people: number; going: true }[] = [],
 		skipFirst = false;
 
 	$: relevantGuests = newGuests.slice(skipFirst ? 1 : 0);
@@ -78,7 +78,7 @@
 				.trim()
 				.split(',')
 				.map((str) => str.trim());
-			return { lastName, firstName, people: parseInt(people) };
+			return { lastName, firstName, people: parseInt(people), going: true };
 		});
 	}
 </script>

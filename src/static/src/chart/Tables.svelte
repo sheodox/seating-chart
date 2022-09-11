@@ -27,14 +27,14 @@
 		}
 	}
 	.table {
-		background: var(--shdx-gray-50);
+		background: var(--shdx-gray-200);
 		outline: 4px solid transparent;
 		width: var(--table-width);
 		aspect-ratio: 1;
 		position: absolute;
 		border-radius: 50%;
 		transform: translate(-50%, -50%);
-		color: black;
+		color: white;
 		display: flex;
 		align-items: center;
 		border: 1px solid black;
@@ -85,6 +85,11 @@
 	.over-capacity {
 		background: var(--shdx-red-400);
 	}
+	.table-guest:hover {
+		color: var(--shdx-blue-500);
+		border-radius: 2px;
+		overflow: hidden;
+	}
 </style>
 
 <div
@@ -126,7 +131,7 @@
 			</p>
 			<div class="guests">
 				{#each assignedGuests(table, $guests) as guest}
-					<p class="m-0">
+					<p class="m-0 table-guest" draggable="true" on:dragstart={(e) => guestDragStart(e, guest)}>
 						{guest.firstName}
 						{guest.lastName}
 						- ({guest.people})
@@ -142,7 +147,7 @@
 	import { onMount, tick } from 'svelte';
 	import { Icon } from 'sheodox-ui';
 	import { editorMode } from '../stores/editor';
-	import { guestOps, guests, Guest, draggingGuest } from '../stores/guests';
+	import { guestOps, guests, Guest, draggingGuest, guestDragStart } from '../stores/guests';
 	import { tableOps, tables, highlightTable, Table, tableZoom } from '../stores/tables';
 
 	$: editable = ['tables', 'assignments'].includes($editorMode);

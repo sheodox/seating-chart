@@ -13,7 +13,7 @@
 			{#each guests as guest}
 				<tr on:mouseenter={() => ($highlightTable = guest.tableId)} on:mouseleave={() => ($highlightTable = '')}>
 					<td>
-						<button draggable="true" on:dragstart={(e) => dragStart(e, guest)}>
+						<button draggable="true" on:dragstart={(e) => guestDragStart(e, guest)}>
 							{guest.firstName}
 							{guest.lastName}
 							<span class="shdx-badge-pink fw-bold px-1">{guest.people} <Icon icon="users" /></span>
@@ -36,7 +36,7 @@
 <script lang="ts">
 	import { Icon } from 'sheodox-ui';
 	import { highlightTable, Table, tables } from '../stores/tables';
-	import { draggingGuest, Guest, guestOps, sortGuests } from '../stores/guests';
+	import { guestDragStart, Guest, guestOps, sortGuests } from '../stores/guests';
 
 	export let guests: Guest[];
 	export let listTitle: string;
@@ -46,19 +46,6 @@
 	$: {
 		sortedGuests = [...guests];
 		sortGuests(sortedGuests);
-	}
-
-	function dragStart(e: DragEvent, guest: Guest) {
-		e.dataTransfer.setData('guestId', guest.id);
-		$draggingGuest = guest;
-
-		window.addEventListener(
-			'dragend',
-			() => {
-				$draggingGuest = null;
-			},
-			{ once: true }
-		);
 	}
 
 	function tableName(tableId: string, tables: Table[]) {

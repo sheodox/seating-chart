@@ -8,7 +8,6 @@ export interface Table {
 	posX: number;
 	posY: number;
 }
-
 function initFromLocalStorage(key: string, fallback: number) {
 	const val = localStorage.getItem(key);
 	if (!val) {

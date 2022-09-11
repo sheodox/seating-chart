@@ -15,6 +15,20 @@ export const guests = writable<Guest[]>([]);
 
 export const draggingGuest = writable<Guest>(null);
 
+export function guestDragStart(e: DragEvent, guest: Guest) {
+	e.dataTransfer.setData('guestId', guest.id);
+	e.stopPropagation();
+	draggingGuest.set(guest);
+
+	window.addEventListener(
+		'dragend',
+		() => {
+			draggingGuest.set(null);
+		},
+		{ once: true }
+	);
+}
+
 on('guests/list', (g: Guest[]) => {
 	sortGuests(g);
 	guests.set(g);

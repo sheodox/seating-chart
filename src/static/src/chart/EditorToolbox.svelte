@@ -2,6 +2,8 @@
 	aside {
 		background-color: var(--shdx-gray-400);
 		width: 25rem;
+		height: 90vh;
+		overflow: auto;
 		border-radius: 10px 0 0 10px;
 	}
 	aside :global(th) {

@@ -50,12 +50,11 @@
 		}
 
 		.table-name {
-			color: black;
 			border-radius: 2px;
 			padding: 2px 3px;
 			font-weight: bold;
 			&:hover {
-				background: var(--shdx-gray-200);
+				background: var(--shdx-gray-300);
 			}
 
 			&.duplicate-name {

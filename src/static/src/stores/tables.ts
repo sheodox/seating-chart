@@ -9,8 +9,29 @@ export interface Table {
 	posY: number;
 }
 
+function initFromLocalStorage(key: string, fallback: number) {
+	const val = localStorage.getItem(key);
+	if (!val) {
+		return fallback;
+	}
+
+	const int = parseInt(val, 10);
+	if (isNaN(int)) {
+		return fallback;
+	}
+	return int;
+}
+
 export const tables = writable<Table[]>([]);
 export const highlightTable = writable('');
+const tableZoomKey = 'tableZoom';
+export const tableZoom = writable(initFromLocalStorage(tableZoomKey, 10));
+
+tableZoom.subscribe((val) => {
+	if (typeof val === 'number' && !isNaN(val)) {
+		localStorage.setItem(tableZoomKey, '' + val);
+	}
+});
 
 interface TableAdd {
 	name: string;

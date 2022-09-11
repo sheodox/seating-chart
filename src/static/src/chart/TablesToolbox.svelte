@@ -1,4 +1,9 @@
 <h1 class="my-0">Tables</h1>
+<label>
+	Table Width
+	<input bind:value={$tableZoom} min="1" max="15" type="range" />
+</label>
+
 <table>
 	<thead>
 		<tr>
@@ -21,7 +26,8 @@
 </table>
 
 <script lang="ts">
-	import { Table, tableOps, tables } from '../stores/tables';
+	import { TextInput } from 'sheodox-ui';
+	import { Table, tableOps, tables, tableZoom } from '../stores/tables';
 
 	function promptCapacity(table: Table) {
 		const capacity = parseInt(prompt('Enter a new capacity', '' + table.capacity), 10);

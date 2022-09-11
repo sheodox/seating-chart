@@ -3,7 +3,8 @@
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 100%;
+		aspect-ratio: 1;
+
 		&:not(.editable) {
 			opacity: 0.2;
 			pointer-events: none;
@@ -28,7 +29,7 @@
 	.table {
 		background: var(--shdx-gray-50);
 		outline: 4px solid transparent;
-		width: 10%;
+		width: var(--table-width);
 		aspect-ratio: 1;
 		position: absolute;
 		border-radius: 50%;
@@ -94,6 +95,7 @@
 	on:drop={finishMovingPoint}
 	on:mouseup={finishMovingPoint}
 	on:dragover|preventDefault
+	style="--table-width: {$tableZoom}%"
 >
 	{#each $tables as table, index}
 		<div
@@ -141,7 +143,7 @@
 	import { Icon } from 'sheodox-ui';
 	import { editorMode } from '../stores/editor';
 	import { guestOps, guests, Guest, draggingGuest } from '../stores/guests';
-	import { tableOps, tables, highlightTable, Table } from '../stores/tables';
+	import { tableOps, tables, highlightTable, Table, tableZoom } from '../stores/tables';
 
 	$: editable = ['tables', 'assignments'].includes($editorMode);
 

@@ -34,7 +34,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each $guests as guest}
+			{#each $guests as guest (guest.id)}
 				<Guest {guest} />
 			{/each}
 		</tbody>

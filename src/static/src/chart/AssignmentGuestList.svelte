@@ -35,8 +35,10 @@
 
 <script lang="ts">
 	import { Icon } from 'sheodox-ui';
-	import { highlightTable, Table, tables } from '../stores/tables';
-	import { guestDragStart, Guest, guestOps, sortGuests } from '../stores/guests';
+	import { highlightTable, tables } from '../stores/tables';
+	import { guestDragStart, guestOps, sortGuests } from '../stores/guests';
+	import type { Table } from '../stores/tables';
+	import type { Guest } from '../stores/guests';
 
 	export let guests: Guest[];
 	export let listTitle: string;

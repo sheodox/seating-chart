@@ -44,7 +44,8 @@
 
 <script lang="ts">
 	import { Checkbox, Icon } from 'sheodox-ui';
-	import { editingLineIndex, highlightingLineIndex, lineOps, lines, Line } from '../stores/lines';
+	import { editingLineIndex, highlightingLineIndex, lineOps, lines } from '../stores/lines';
+	import type { Line } from '../stores/lines';
 
 	function deleteLine(id: string) {
 		lineOps.delete(id);

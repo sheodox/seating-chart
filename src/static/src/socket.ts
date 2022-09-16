@@ -1,4 +1,5 @@
 import { createAutoExpireToast } from 'sheodox-ui';
+import { userLoggedIn } from './stores/app';
 
 const RECONNECT_DELAY_MS = 1000;
 
@@ -33,9 +34,24 @@ function sendMsg(msg: WSMessage) {
 	socket.send(JSON.stringify(msg));
 }
 
-function setupSocket() {
-	const protocol = location.protocol === 'https:' ? 'wss' : 'ws',
-		ws = new WebSocket(`${protocol}://${location.hostname}:5007/ws`);
+async function setupSocket() {
+	const res = await fetch(`/api/auth/status`, {
+		credentials: 'include',
+	});
+
+	if (res.status === 401) {
+		userLoggedIn.set(false);
+		return;
+	}
+
+	userLoggedIn.set(true);
+
+	const socketProtocol = location.protocol === 'http:' ? 'ws' : 'wss';
+	const ws = new WebSocket(`${socketProtocol}://${location.hostname}:${location.port}/api/ws`);
+
+	ws.addEventListener('error', (e) => {
+		console.log(e);
+	});
 
 	ws.addEventListener('message', (msg) => {
 		if (msg.data === 'pong') {

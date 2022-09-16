@@ -8,7 +8,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sheodox/seating-chart/controllers"
@@ -17,8 +19,11 @@ import (
 )
 
 var (
-	upgrader = getUpgrader()
-	isDev    = os.Getenv("APP_ENV") == "development"
+	upgrader         = getUpgrader()
+	isDev            = os.Getenv("APP_ENV") == "development"
+	allowed_username = os.Getenv("USER_USERNAME")
+	allowed_password = os.Getenv("USER_PASSWORD")
+	session_secret   = os.Getenv("SESSION_SECRET")
 )
 
 func getUpgrader() websocket.Upgrader {
@@ -48,6 +53,7 @@ type Server struct {
 	Guests  controllers.GuestController
 	Tables  controllers.TableController
 	Lines   controllers.LineController
+	Auth    controllers.AuthController
 	clients []*websocket.Conn
 }
 
@@ -70,33 +76,39 @@ func NewServer() *Server {
 				Repo: reps.Line,
 			},
 		},
+		Auth:    controllers.NewAuthController(allowed_username, allowed_password),
 		clients: make([]*websocket.Conn, 0),
 	}
 }
 
 func (s *Server) Start() {
+	if allowed_username == "" || allowed_password == "" {
+		log.Fatal("Need to set a USER_USERNAME and USER_PASSWORD in .env")
+	}
+
+	if session_secret == "" {
+		log.Fatal("Need to set a SESSION_SECRET in .env")
+	}
+
 	e := echo.New()
 
-	if isDev {
-		// allow stuff like logout redirects to route back to the dev server
-		e.GET("/", func(c echo.Context) error {
-			return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
-		})
-
-		// CORS for the dev server
-		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins:     []string{"http://localhost:3000"},
-			AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-			AllowCredentials: true,
-		}))
-	} else {
+	if !isDev {
 		e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 			Root:  "/usr/src/frontend",
 			HTML5: true,
 		}))
 	}
 
-	e.GET("/ws", s.connectClient)
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(os.Getenv(session_secret)))))
+
+	e.GET("/api/auth/status", s.Auth.Status)
+	e.POST("/api/auth/login", s.Auth.Login)
+	e.GET("/api/auth/logout", s.Auth.Logout)
+
+	authed := e.Group("/api")
+	authed.Use(s.Auth.RequireUser)
+
+	authed.GET("/ws", s.connectClient)
 
 	e.Logger.Fatal(e.Start(":5007"))
 }

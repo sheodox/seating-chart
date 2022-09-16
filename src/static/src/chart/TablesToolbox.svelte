@@ -26,8 +26,8 @@
 </table>
 
 <script lang="ts">
-	import { TextInput } from 'sheodox-ui';
-	import { Table, tableOps, tables, tableZoom } from '../stores/tables';
+	import { tableOps, tables, tableZoom } from '../stores/tables';
+	import type { Table } from '../stores/tables';
 
 	function promptCapacity(table: Table) {
 		const capacity = parseInt(prompt('Enter a new capacity', '' + table.capacity), 10);

@@ -146,8 +146,10 @@
 	import { onMount, tick } from 'svelte';
 	import { Icon } from 'sheodox-ui';
 	import { editorMode } from '../stores/editor';
-	import { guestOps, guests, Guest, draggingGuest, guestDragStart } from '../stores/guests';
-	import { tableOps, tables, highlightTable, Table, tableZoom } from '../stores/tables';
+	import { guestOps, guests, draggingGuest, guestDragStart } from '../stores/guests';
+	import { tableOps, tables, highlightTable, tableZoom } from '../stores/tables';
+	import type { Guest } from '../stores/guests';
+	import type { Table } from '../stores/tables';
 
 	$: editable = ['tables', 'assignments'].includes($editorMode);
 

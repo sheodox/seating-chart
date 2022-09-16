@@ -6,3 +6,23 @@ services:
     volumes:
       - ./src/server/:/go/src/app/
     restart: unless-stopped
+  vite:
+    build:
+      context: ./src/static
+    volumes:
+      - ./src/static/:/usr/src/app
+    restart: unless-stopped
+  nginx:
+    image: nginx:1.23
+    ports:
+      - 5007:80
+    depends_on:
+      - api
+      - vite
+    restart: unless-stopped
+    volumes:
+      - ./public:/var/www/static
+      - type: bind
+        source: ./config/nginx/nginx.dev.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true

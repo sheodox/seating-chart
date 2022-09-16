@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
-import page, { Context } from 'page';
+import page from 'page';
+import type { Context } from 'page';
 
 //the name of the header nav item this route lives within
 export const activeApp = writable<string>('');

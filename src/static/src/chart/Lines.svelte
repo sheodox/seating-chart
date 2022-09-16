@@ -79,7 +79,8 @@
 </div>
 
 <script lang="ts">
-	import { editingLineIndex, lines, lineOps, Line, LineCoordinate, highlightingLineIndex } from '../stores/lines';
+	import { editingLineIndex, lines, lineOps, highlightingLineIndex } from '../stores/lines';
+	import type { Line } from '../stores/lines';
 	import { editorMode } from '../stores/editor';
 
 	$: editable = $editorMode === 'lines';

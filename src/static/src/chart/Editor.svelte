@@ -35,7 +35,8 @@
 	import Lines from './Lines.svelte';
 	import Tables from './Tables.svelte';
 	import EditorToolbox from './EditorToolbox.svelte';
-	import { EditorMode, editorMode } from '../stores/editor';
+	import { editorMode } from '../stores/editor';
+	import type { EditorMode } from '../stores/editor';
 
 	const modes: { id: EditorMode; name: string }[] = [
 		{

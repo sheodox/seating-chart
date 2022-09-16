@@ -1,4 +1,8 @@
 <h1 class="my-0">Guests</h1>
+<div class="py-3">
+	<Checkbox id="hide-guests" bind:checked={$showGuests}>Show guests on tables</Checkbox>
+</div>
+
 <div class="f-column gap-6">
 	<TabList {tabs} bind:selectedTab />
 	<Tab {selectedTab} tabId="unassigned">
@@ -13,6 +17,8 @@
 	import { TabList, Tab } from 'sheodox-ui';
 	import AssignmentGuestList from './AssignmentGuestList.svelte';
 	import { guests } from '../stores/guests';
+	import { Checkbox } from 'sheodox-ui';
+	import { showGuests } from '../stores/tables';
 
 	let selectedTab = 'unassigned';
 

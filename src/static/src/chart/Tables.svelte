@@ -24,6 +24,14 @@
 					display: block;
 				}
 			}
+			.table-guest {
+				cursor: move;
+				&:hover {
+					color: var(--shdx-blue-500);
+					border-radius: 2px;
+					overflow: hidden;
+				}
+			}
 		}
 	}
 	.table {
@@ -40,6 +48,21 @@
 		border: 1px solid black;
 		transition: border-radius 0.1s;
 		overflow: hidden;
+
+		&:not(.show-guests) {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.table-name {
+				font-size: 30px;
+			}
+
+			.guest-count {
+				font-size: 20px;
+			}
+		}
 
 		.guests {
 			font-size: var(--shdx-font-size-1);
@@ -84,11 +107,6 @@
 	.over-capacity {
 		background: var(--shdx-red-400);
 	}
-	.table-guest:hover {
-		color: var(--shdx-blue-500);
-		border-radius: 2px;
-		overflow: hidden;
-	}
 </style>
 
 <div
@@ -104,6 +122,7 @@
 	{#each $tables as table, index}
 		<div
 			class="table f-column"
+			class:show-guests={$showGuests}
 			style="top: {table.posY * 100}%; left: {table.posX * 100}%;"
 			class:moving={movingTable !== null}
 			class:dragging-guest={!!$draggingGuest}
@@ -124,19 +143,29 @@
 				title={hasDuplicateName(table.name) ? 'Duplicate name' : ''}
 				on:click|stopPropagation={() => renameTable(index)}>{table.name}</button
 			>
-			<p class="fw-bold m-0">
-				<Icon icon="users" />
-				{peopleAtTable(table, $guests)} / {table.capacity}
+			<p class="fw-bold m-0 guest-count">
+				{#if $showGuests}
+					<Icon icon="users" />
+					{peopleAtTable(table, $guests)} / {table.capacity}
+				{:else}
+					{peopleAtTable(table, $guests)} people
+				{/if}
 			</p>
-			<div class="guests">
-				{#each assignedGuests(table, $guests) as guest}
-					<p class="m-0 table-guest" draggable="true" on:dragstart={(e) => guestDragStart(e, guest)}>
-						{guest.firstName}
-						{guest.lastName}
-						- ({guest.people})
-					</p>
-				{/each}
-			</div>
+			{#if $showGuests}
+				<div class="guests">
+					{#each assignedGuests(table, $guests) as guest}
+						<p
+							class="m-0 table-guest"
+							draggable={$editorMode === 'assignments'}
+							on:dragstart={(e) => guestDragStart(e, guest)}
+						>
+							{guest.firstName}
+							{guest.lastName}
+							- ({guest.people})
+						</p>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	{/each}
 </div>
@@ -147,7 +176,7 @@
 	import { Icon } from 'sheodox-ui';
 	import { editorMode } from '../stores/editor';
 	import { guestOps, guests, draggingGuest, guestDragStart } from '../stores/guests';
-	import { tableOps, tables, highlightTable, tableZoom } from '../stores/tables';
+	import { tableOps, tables, highlightTable, tableZoom, showGuests } from '../stores/tables';
 	import type { Guest } from '../stores/guests';
 	import type { Table } from '../stores/tables';
 

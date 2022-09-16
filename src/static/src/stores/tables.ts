@@ -23,6 +23,7 @@ function initFromLocalStorage(key: string, fallback: number) {
 
 export const tables = writable<Table[]>([]);
 export const highlightTable = writable('');
+export const showGuests = writable(true);
 const tableZoomKey = 'tableZoom';
 export const tableZoom = writable(initFromLocalStorage(tableZoomKey, 10));
 

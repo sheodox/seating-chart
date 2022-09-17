@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { send, on } from '../socket';
 
 export interface Guest {
@@ -10,8 +10,20 @@ export interface Guest {
 	going: boolean;
 	//notes: string;
 }
+function sortableName(guest: Guest) {
+	return `${guest.lastName}, ${guest.firstName}`;
+}
 
 export const guests = writable<Guest[]>([]);
+export const guestsAlphabetized = derived(guests, (guests) => {
+	const sorted = [...guests];
+
+	sorted.sort((g1, g2) => {
+		return sortableName(g1).localeCompare(sortableName(g2));
+	});
+
+	return sorted;
+});
 
 export const draggingGuest = writable<Guest>(null);
 

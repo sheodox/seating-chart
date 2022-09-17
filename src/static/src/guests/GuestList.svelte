@@ -23,7 +23,7 @@
 	<NewGuest />
 
 	<table>
-		<caption>Total {$guests.length} guests with {totalPeople} people, of which {going} are going.</caption>
+		<caption>Total {$guestsAlphabetized.length} guests with {totalPeople} people, of which {going} are going.</caption>
 		<thead>
 			<tr>
 				<th class="last-name">Last Name</th>
@@ -34,7 +34,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each $guests as guest (guest.id)}
+			{#each $guestsAlphabetized as guest (guest.id)}
 				<Guest {guest} />
 			{/each}
 		</tbody>
@@ -42,11 +42,11 @@
 </section>
 
 <script lang="ts">
-	import { guests } from '../stores/guests';
+	import { guestsAlphabetized } from '../stores/guests';
 	import NewGuest from './NewGuest.svelte';
 	import Guest from './Guest.svelte';
 	import GuestToolbar from './GuestToolbar.svelte';
 
-	$: totalPeople = $guests.reduce((people, guest) => people + guest.people, 0);
-	$: going = $guests.reduce((people, guest) => (guest.going ? people + guest.people : people), 0);
+	$: totalPeople = $guestsAlphabetized.reduce((people, guest) => people + guest.people, 0);
+	$: going = $guestsAlphabetized.reduce((people, guest) => (guest.going ? people + guest.people : people), 0);
 </script>

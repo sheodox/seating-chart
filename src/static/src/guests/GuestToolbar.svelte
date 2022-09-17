@@ -31,9 +31,27 @@
 		<div class="modal-body f-column gap-3">
 			<TextInput id="export-text-separator" bind:value={exportTextSeparator}>Name/table separator</TextInput>
 
-			{#if hasUnassignedGuests}
-				<p class="sx-badge-red">There are guests without table assignments!</p>
+			{#if numUnassignedGuests > 0}
+				<p class="sx-badge-red">
+					{#if numUnassignedGuests === 1}
+						There is a guest without a table assignment!
+					{:else}
+						There are {numUnassignedGuests} guests without table assignments!
+					{/if}
+				</p>
 			{/if}
+
+			<fieldset>
+				<legend>Tables to include</legend>
+				{#each $tables as table}
+					{@const included = tablesToInclude.includes(table.id)}
+					<button
+						on:click={() => toggleTableIncluded(table.id, included)}
+						aria-pressed={included}
+						class:primary={included}><span>{table.name}<span /></span></button
+					>
+				{/each}
+			</fieldset>
 
 			<label>
 				Result
@@ -48,7 +66,7 @@
 
 <script lang="ts">
 	import { Icon, Modal, TextInput } from 'sheodox-ui';
-	import { guests } from '../stores/guests';
+	import { guestsAlphabetized } from '../stores/guests';
 	import { tables } from '../stores/tables';
 	import type { Guest } from '../stores/guests';
 	import type { Table } from '../stores/tables';
@@ -57,17 +75,32 @@
 	let showImport = false,
 		showExportText = false,
 		exportTextSeparator = ' - ',
-		hasUnassignedGuests = false;
+		numUnassignedGuests = 0,
+		tablesToInclude = $tables.map((t) => t.id);
 
-	$: exportedText = genExportText(exportTextSeparator, $guests, $tables);
+	$: exportedText = genExportText(exportTextSeparator, $guestsAlphabetized, $tables, tablesToInclude);
 
-	function genExportText(sep: string, guests: Guest[], tables: Table[]) {
+	function toggleTableIncluded(id: string, included: boolean) {
+		included ? tablesToInclude.splice(tablesToInclude.indexOf(id), 1) : tablesToInclude.push(id);
+
+		tablesToInclude = tablesToInclude;
+	}
+
+	function genExportText(sep: string, guests: Guest[], tables: Table[], tablesToInclude: string[]) {
 		const rows = [];
-		hasUnassignedGuests = false;
+		numUnassignedGuests = 0;
 
 		let lastFirstLetter = '';
 
 		for (const guest of guests) {
+			if (!guest.tableId && guest.going) {
+				numUnassignedGuests += 1;
+			}
+
+			if (!tablesToInclude.includes(guest.tableId)) {
+				continue;
+			}
+
 			const tableName = tables.find((table) => table.id === guest.tableId)?.name,
 				lastNameFirstLetter = guest.lastName.at(0);
 
@@ -78,10 +111,6 @@
 			}
 
 			lastFirstLetter = lastNameFirstLetter;
-
-			if (!guest.tableId && guest.going) {
-				hasUnassignedGuests = true;
-			}
 
 			rows.push(`${guest.lastName}, ${guest.firstName}${sep}${tableName}`);
 		}
@@ -100,7 +129,7 @@
 
 	function exportAssignments() {
 		const rows = [['Name', 'Table']];
-		for (const guest of $guests) {
+		for (const guest of $guestsAlphabetized) {
 			const tableName = $tables.find((table) => table.id === guest.tableId)?.name;
 
 			rows.push([`"${guest.lastName}, ${guest.firstName}"`, tableName]);

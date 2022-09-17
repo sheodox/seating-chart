@@ -16,7 +16,7 @@
 <script lang="ts">
 	import { TabList, Tab } from 'sheodox-ui';
 	import AssignmentGuestList from './AssignmentGuestList.svelte';
-	import { guests } from '../stores/guests';
+	import { guestsAlphabetized } from '../stores/guests';
 	import { Checkbox } from 'sheodox-ui';
 	import { showGuests } from '../stores/tables';
 
@@ -30,6 +30,6 @@
 		{ id: 'assigned', title: 'Assigned' },
 	];
 
-	$: unassigned = $guests.filter((g) => g.going && !g.tableId);
-	$: assigned = $guests.filter((g) => g.going && !!g.tableId);
+	$: unassigned = $guestsAlphabetized.filter((g) => g.going && !g.tableId);
+	$: assigned = $guestsAlphabetized.filter((g) => g.going && !!g.tableId);
 </script>

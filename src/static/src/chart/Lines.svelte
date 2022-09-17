@@ -20,7 +20,7 @@
 		opacity: 0.3;
 	}
 	svg.highlighted {
-		stroke: var(--shdx-blue-500);
+		stroke: var(--sx-blue-500);
 		opacity: 1;
 	}
 	.point-button {

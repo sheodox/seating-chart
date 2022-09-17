@@ -1,6 +1,6 @@
 <style>
 	tr {
-		border-bottom: 1px solid var(--shdx-gray-300);
+		border-bottom: 1px solid var(--sx-gray-300);
 	}
 	.readonly-going {
 		cursor: not-allowed;

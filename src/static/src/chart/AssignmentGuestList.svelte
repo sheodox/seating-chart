@@ -1,6 +1,6 @@
 {#if guests.length}
 	<table>
-		<caption class="shdx-font-size-5 fw-bold">{listTitle}</caption>
+		<caption class="sx-font-size-5 fw-bold">{listTitle}</caption>
 		<thead>
 			<tr>
 				<th>Guest</th>
@@ -16,7 +16,7 @@
 						<button draggable="true" on:dragstart={(e) => guestDragStart(e, guest)}>
 							{guest.firstName}
 							{guest.lastName}
-							<span class="shdx-badge-pink fw-bold px-1">{guest.people} <Icon icon="users" /></span>
+							<span class="sx-badge-pink fw-bold px-1">{guest.people} <Icon icon="users" /></span>
 						</button>
 					</td>
 					{#if showTable}

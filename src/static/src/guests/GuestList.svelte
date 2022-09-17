@@ -9,10 +9,10 @@
 		width: 15rem;
 	}
 	table {
-		border: 1px solid var(--shdx-gray-300);
+		border: 1px solid var(--sx-gray-300);
 	}
 	th {
-		padding: var(--shdx-spacing-3);
+		padding: var(--sx-spacing-3);
 		text-align: left;
 	}
 </style>

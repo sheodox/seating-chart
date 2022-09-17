@@ -1,6 +1,6 @@
 <style>
 	button[aria-pressed='true'] {
-		background-color: var(--shdx-gray-300);
+		background-color: var(--sx-gray-300);
 	}
 </style>
 

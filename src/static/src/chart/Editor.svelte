@@ -1,14 +1,14 @@
 <style>
 	.toolbar {
 		align-self: center;
-		background: var(--shdx-gray-500);
+		background: var(--sx-gray-500);
 		border-radius: 0 0 6px 6px;
 	}
 	button {
 		margin: 0;
 	}
 	button[aria-pressed='true'] {
-		background-color: var(--shdx-gray-300);
+		background-color: var(--sx-gray-300);
 	}
 	#editors {
 		flex: 1;

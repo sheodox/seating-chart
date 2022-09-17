@@ -1,6 +1,6 @@
 <style>
 	aside {
-		background-color: var(--shdx-gray-400);
+		background-color: var(--sx-gray-400);
 		width: 25rem;
 		height: 90vh;
 		overflow: auto;

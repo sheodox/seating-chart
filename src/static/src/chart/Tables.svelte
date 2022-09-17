@@ -27,7 +27,7 @@
 			.table-guest {
 				cursor: move;
 				&:hover {
-					color: var(--shdx-blue-500);
+					color: var(--sx-blue-500);
 					border-radius: 2px;
 					overflow: hidden;
 				}
@@ -35,7 +35,7 @@
 		}
 	}
 	.table {
-		background: var(--shdx-gray-200);
+		background: var(--sx-gray-200);
 		outline: 4px solid transparent;
 		width: var(--table-width);
 		aspect-ratio: 1;
@@ -65,7 +65,7 @@
 		}
 
 		.guests {
-			font-size: var(--shdx-font-size-1);
+			font-size: var(--sx-font-size-1);
 		}
 
 		&.moving {
@@ -77,35 +77,35 @@
 			padding: 2px 3px;
 			font-weight: bold;
 			&:hover {
-				background: var(--shdx-gray-300);
+				background: var(--sx-gray-300);
 			}
 
 			&.duplicate-name {
 				border: 2px solid red;
 				border-radius: 5px;
-				background: var(--shdx-red-800);
+				background: var(--sx-red-800);
 				color: red;
 			}
 		}
 	}
 	.table.highlight-table {
 		outline-offset: 4px;
-		outline-color: var(--shdx-blue-500);
+		outline-color: var(--sx-blue-500);
 	}
 
 	.dragging-guest {
 		outline-offset: 0px;
 
 		&.can-hold {
-			outline-color: var(--shdx-blue-500);
+			outline-color: var(--sx-blue-500);
 		}
 		&:not(.can-hold) {
-			outline-color: var(--shdx-red-500);
+			outline-color: var(--sx-red-500);
 			opacity: 0.3;
 		}
 	}
 	.over-capacity {
-		background: var(--shdx-red-400);
+		background: var(--sx-red-400);
 	}
 </style>
 

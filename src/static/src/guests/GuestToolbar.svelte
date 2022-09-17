@@ -3,6 +3,9 @@
 		height: 10rem;
 		width: 40rem;
 	}
+	fieldset {
+		width: 40rem;
+	}
 </style>
 
 <div>

@@ -29,7 +29,7 @@
 {#if showExportText}
 	<Modal title="Export Text" bind:visible={showExportText}>
 		<div class="modal-body f-column gap-3">
-			<TextInput id="export-text-separator" bind:value={exportTextSeparator}>Name/Table Separator</TextInput>
+			<TextInput id="export-text-separator" bind:value={exportTextSeparator}>Name/table separator</TextInput>
 
 			{#if hasUnassignedGuests}
 				<p class="sx-badge-red">There are guests without table assignments!</p>
@@ -65,8 +65,19 @@
 		const rows = [];
 		hasUnassignedGuests = false;
 
+		let lastFirstLetter = '';
+
 		for (const guest of guests) {
-			const tableName = tables.find((table) => table.id === guest.tableId)?.name;
+			const tableName = tables.find((table) => table.id === guest.tableId)?.name,
+				lastNameFirstLetter = guest.lastName.at(0);
+
+			if (lastFirstLetter && lastNameFirstLetter !== lastFirstLetter) {
+				// add an empty blank line between blocks of names that start with the first letter, to make it easier to paste
+				// all names that start with the same letter into groups alphabetically when printing
+				rows.push('');
+			}
+
+			lastFirstLetter = lastNameFirstLetter;
 
 			if (!guest.tableId && guest.going) {
 				hasUnassignedGuests = true;
